@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='genetic-algorithm',  # Replace with your package name
+    name='genetic-algorithm-py',  # Replace with your package name
     version='1.0.0',
     description='A genetic algorithm library for solving optimization problems',
     long_description=open('README.md').read(),
