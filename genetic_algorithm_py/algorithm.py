@@ -117,10 +117,9 @@ class GeneticAlgorithm:
     Executes the genetic algorithm using DNA, population, selection, crossover, and mutation strategies.
     """
 
-    def __init__(self, dna: DNA, population_size: int, genome_size: int, generations: int, mutation_rate: float, bestFitness=None):
+    def __init__(self, dna: DNA, population_size: int, genome_size: int, mutation_rate: float, bestFitness=None):
         # Initialize components and parameters
         self.dna = dna
-        self.generations = generations
         self.mutation_rate = mutation_rate
         self.dna.get_mutation().set_mutation_rate(mutation_rate)
         self.currentGen = 0
@@ -128,13 +127,13 @@ class GeneticAlgorithm:
         self.allBest = None
         self.population = Population(dna, population_size, genome_size)
 
-    def run(self):
+    def run(self, generations: int):
         """
         Runs the genetic algorithm across the specified number of generations.
         """
         # Evaluate initial population
         self.population.evaluate_population()
-        for i in range(self.generations):
+        for i in range(generations):
             best_individual = self.run_single_generation()
         return best_individual
 
