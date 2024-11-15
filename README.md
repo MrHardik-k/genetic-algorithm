@@ -1,170 +1,150 @@
 
 # Genetic Algorithm Library
 
-This Python library, `genetic_algorithm_py`, provides a flexible framework for implementing genetic algorithms, featuring customizable strategies for selection, crossover, mutation, and fitness evaluation. The library enables users to create, manage, and evolve populations of individuals represented by genomes composed of genes.
+`genetic_algorithm_py` is a Python library for implementing genetic algorithms with customizable components. 
+This library is designed to allow easy customization and extension, making it suitable for various optimization problems.
 
-## Table of Contents
-- [Installation](#installation)
-- [Overview](#overview)
-- [Project Structure](#project-structure)
-- [Usage](#usage)
-- [Class Descriptions](#class-descriptions)
-  - [Individual](#individual)
-  - [Population](#population)
-  - [Strategy Classes](#strategy-classes)
-    - [SelectionStrategy](#selectionstrategy)
-    - [CrossoverStrategy](#crossoverstrategy)
-    - [MutationStrategy](#mutationstrategy)
-    - [FitnessStrategy](#fitnessstrategy)
-  - [DNAStrategy](#dnastrategy)
-- [Examples](#examples)
-- [Future Extensions](#future-extensions)
+## Features
+- Customizable selection, crossover, mutation, and fitness strategies.
+- Predefined strategies in the `defaults` module for common use cases.
+- Modular design to facilitate integration with different types of genetic algorithms.
+
+---
 
 ## Installation
-
-Clone this repository and install required packages if any (e.g., `random` is part of Python’s standard library). Ensure that Python 3.9 or later is installed to support type hinting for `tuple[Individual, Individual]`.
 
 ```bash
 pip install genetic_algorithm_py
 ```
 
-## Overview
+---
 
-Genetic algorithms (GAs) are optimization techniques inspired by natural evolution. This library uses an object-oriented approach to implement customizable genetic algorithms, providing base classes for different genetic operations. Subclass these base classes to define specific strategies or use the default implementations available in the `defaults` package.
+## Getting Started
 
-## Project Structure
+### Basic Example
 
-```plaintext
-genetic_algorithm_py/
-├── algorithm/
-│   ├── selection.py
-│   ├── crossover.py
-│   ├── mutation.py
-│   └── fitness_function.py
-├── strategy/
-│   ├── __init__.py
-│   ├── crossover_strategy.py
-│   ├── dna_strategy.py
-│   ├── fitness_strategy.py
-│   ├── mutation_strategy.py
-│   └── selection_strategy.py
-├── individual.py
-├── population.py
-└── README.md
-```
-
-## Usage
-
-1. **Define or Customize Strategies**: Extend any strategy classes in the `strategy` folder to create custom genetic operations.
-2. **Set Up the Algorithm**: Use the `DNAStrategy` class to specify genes, target genomes, and select the strategies for selection, crossover, mutation, and fitness evaluation.
-3. **Run the Algorithm**: Instantiate `Population` with a set of individuals and use the strategies to evolve generations.
-
-## Class Descriptions
-
-### Individual
-Represents a single member of the population with a genome and associated fitness.
-
-- **Attributes**
-  - `genome`: A list of genes representing the individual.
-  - `fitness`: A float representing the individual's fitness score.
-  
-- **Methods**
-  - `update_fitness()`: Recalculate fitness based on the provided fitness strategy.
-
-### Population
-Represents a collection of individuals in the genetic algorithm.
-
-- **Attributes**
-  - `individuals`: A list of `Individual` objects.
-
-- **Methods**
-  - `evaluate_population()`: Calculates the fitness of each individual using the fitness strategy.
-  - `select()`, `crossover()`, `mutate()`: Performs genetic operations on the population using the chosen strategies.
-
-### Strategy Classes
-
-Each strategy class defines a specific operation in the genetic algorithm. Subclass these for custom behavior.
-
-#### SelectionStrategy
-Defines the method for selecting parents from the population.
-
-- **Methods**
-  - `select_parents(population)`: Abstract method; overridden in subclasses to select two parents.
-
-#### CrossoverStrategy
-Handles recombination of parent genomes to produce offspring.
-
-- **Methods**
-  - `crossover(parent1, parent2)`: Abstract method; overridden in subclasses to define specific crossover behavior.
-
-#### MutationStrategy
-Defines how individual genomes mutate to introduce genetic variation.
-
-- **Methods**
-  - `mutate(individual)`: Abstract method; overridden in subclasses to define mutation behavior.
-
-#### FitnessStrategy
-Evaluates the fitness of an individual based on its genome.
-
-- **Methods**
-  - `evaluate(genome)`: Abstract method; overridden in subclasses to calculate fitness.
-
-### DNAStrategy
-A higher-level strategy class that combines the selection, crossover, mutation, and fitness strategies to dictate genetic algorithm behavior.
-
-- **Attributes**
-  - `genes`: A list of possible genes for creating genomes.
-  - `target`: An optional target genome used for fitness comparisons.
-  - `duplicate_genomes`: Boolean indicating if duplicate genes are allowed in genomes.
-  
-- **Methods**
-  - `generate_genome(genome_size)`: Generates a genome of the specified size, with or without duplicates.
-  - `get_random_genes(genes_size)`: Retrieves a random selection of genes.
-  
-- **Exceptions**
-  - `__init_subclass__()`: Prevents subclasses from overriding the `__init__` method.
-
-## Examples
-
-### Example 1: Using Default Strategies
+Here is a simple example to get started:
 
 ```python
-from genetic_algorithm_py.individual import Individual
-from genetic_algorithm_py.population import Population
-from genetic_algorithm_py.strategy.dna_strategy import DNAStrategy
+from genetic_algorithm_py import GeneticAlgorithm, Population, Individual
+from genetic_algorithm_py.defaults import RouletteWheelSelection, OnePointCrossover, BitFlipMutation, MaximizeOnesFitness
 
-# Define genes and create a DNA strategy instance with default behaviors
-genes = [0, 1]
-dna_strategy = DNAStrategy(genes)
+# Define parameters
+population_size = 100
+genome_length = 50
+mutation_rate = 0.01
+num_generations = 100
 
-# Create a population with 10 individuals and initialize genomes
-population = Population([Individual(dna_strategy.generate_genome(5)) for _ in range(10)])
-population.evaluate_population()
+# Create components
+selection_strategy = RouletteWheelSelection()
+crossover_strategy = OnePointCrossover()
+mutation_strategy = BitFlipMutation(mutation_rate=mutation_rate)
+fitness_function = MaximizeOnesFitness()
+
+# Create population
+population = Population(size=population_size, genome_length=genome_length, fitness_function=fitness_function)
+
+# Initialize and run genetic algorithm
+ga = GeneticAlgorithm(
+    population=population,
+    selection_strategy=selection_strategy,
+    crossover_strategy=crossover_strategy,
+    mutation_strategy=mutation_strategy
+)
+ga.run(num_generations=num_generations)
+
+# Get best individual
+best_individual = ga.get_best_individual()
+print("Best solution:", best_individual.genome)
+print("Fitness:", best_individual.fitness)
 ```
 
-### Example 2: Custom Crossover Strategy
+---
+
+## Documentation
+
+### 1. Defaults Module
+
+The `defaults` module provides ready-to-use implementations for common strategies.
+
+#### 1.1 Crossover Strategies
+
+The following crossover strategies are available in `defaults/crossover.py`:
+
+- **HalfCrossover**: Splits genomes in half and swaps segments.
+- **OnePointCrossover**: Performs a one-point crossover by selecting a random point and swapping segments.
+- **TwoPointCrossover**: Performs a two-point crossover by selecting two points and swapping segments between them.
+- **UniformCrossover**: Randomly selects genes from each parent to create offspring.
+- **BlendCrossover**: Generates offspring genes within an extended range around each gene pair (controlled by `alpha`).
+- **ArithmeticCrossover**: Averages gene pairs based on a blending factor (`alpha`).
+- **PMXCrossover**: Partially Matched Crossover, suitable for permutation-based problems.
+
+#### 1.2 Fitness Strategies
+
+Defined in `defaults/fitness_function.py`:
+
+- **CompairTargetFitness**: Measures how closely the genome matches a target genome.
+- **MaximizeOnesFitness**: Maximizes the number of ones in the genome.
+- **MinimizeDistanceFitness**: Minimizes the distance between the genome and a target value.
+- **WeightedSumFitness**: Calculates fitness as a weighted sum of genome bits.
+
+#### 1.3 Mutation Strategies
+
+Defined in `defaults/mutation.py`:
+
+- **MultiElementMutation**: Mutates multiple elements in the genome based on the mutation rate.
+- **ElementMutation**: Mutates a single element based on the mutation rate.
+- **BitFlipMutation**: Flips genome bits based on the mutation rate.
+- **SwapMutation**: Swaps two elements in the genome.
+- **ScrambleMutation**: Randomly scrambles a subset of the genome.
+- **SegmentSwapMutation**: Swaps two segments of the genome.
+- **GaussianMutation**: Applies Gaussian mutation to genome values.
+- **BoundaryMutation**: Mutates genome values within specified boundaries.
+- **PolynomialMutation**: Applies polynomial mutation to genome values.
+
+#### 1.4 Selection Strategies
+
+Defined in `defaults/selection.py`:
+
+- **RouletteWheelSelection**: Selects parents based on fitness proportionate probability.
+- **TournamentSelection**: Selects parents using a tournament of random individuals.
+- **RankSelection**: Selects parents based on rank order.
+- **StochasticUniversalSampling**: Selects parents using evenly spaced fitness pointers.
+- **ElitismSelection**: Selects the top `n` individuals based on fitness.
+- **TruncationSelection**: Selects the top percentage of individuals.
+- **BoltzmannSelection**: Selects parents using Boltzmann probabilities.
+- **SteadyStateSelection**: Replaces the least fit individuals in the population.
+- **RankBiasedSelection**: Selects parents using rank-based weights with a bias factor.
+
+---
+
+## Customization
+
+The library allows you to define your own strategies by subclassing the provided interfaces in `strategy`.
 
 ```python
-from genetic_algorithm_py.strategy.crossover_strategy import CrossoverStrategy
+from genetic_algorithm_py.strategy import CrossoverStrategy
 
-# Custom crossover that swaps halves of genomes
 class CustomCrossover(CrossoverStrategy):
     def crossover(self, parent1, parent2):
-        mid = len(parent1.genome) // 2
-        child1_genome = parent1.genome[:mid] + parent2.genome[mid:]
-        child2_genome = parent2.genome[:mid] + parent1.genome[mid:]
-        return Individual(child1_genome), Individual(child2_genome)
-
-# Use CustomCrossover in the DNAStrategy
-dna_strategy.crossover_strategy = CustomCrossover()
+        # Implement custom crossover logic here
+        pass
 ```
 
-## Future Extensions
+---
 
-This library provides a robust base for creating genetic algorithms, but additional functionality could further enhance it:
+## License
 
-1. **Additional Genetic Operations**: Create more specific strategies, such as tournament selection or uniform crossover.
-2. **Parallel Evaluation**: Use multiprocessing to evaluate large populations more efficiently.
-3. **Logging and Visualization**: Implement logging for tracking generations and fitness over time, as well as visualization of progress.
+This library is licensed under the MIT License.
 
-This genetic algorithm library is modular and extensible, making it easy to experiment with different evolutionary strategies and configurations for various optimization tasks. Enjoy exploring the possibilities!
+---
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues or pull requests.
+
+---
+
+## Acknowledgments
+
+This library was inspired by common patterns in genetic algorithms and aims to provide flexibility and usability for both academic and practical applications.
