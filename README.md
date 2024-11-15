@@ -25,8 +25,7 @@ This Python library, `genetic_algorithm_py`, provides a flexible framework for i
 Clone this repository and install required packages if any (e.g., `random` is part of Python’s standard library). Ensure that Python 3.9 or later is installed to support type hinting for `tuple[Individual, Individual]`.
 
 ```bash
-git clone <repository-url>
-cd genetic_algorithm_py
+pip install genetic_algorithm_py
 ```
 
 ## Overview
