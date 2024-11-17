@@ -63,7 +63,7 @@ class StochasticUniversalSampling(SelectionStrategy):
 
 # Elitism Selection
 class ElitismSelection(SelectionStrategy):
-    def __init__(self, num_elites=1):
+    def __init__(self, num_elites=2):
         # Initialize the number of elite individuals to select
         self.num_elites = num_elites
 
@@ -71,7 +71,7 @@ class ElitismSelection(SelectionStrategy):
         # Sort population by fitness in descending order
         sorted_population = sorted(population.individuals, key=lambda ind: ind.fitness, reverse=True)
         # Return the top 'num_elites' individuals as parents
-        return sorted_population[:self.num_elites]
+        return tuple(sorted_population[:self.num_elites])
 
 # Truncation Selection
 class TruncationSelection(SelectionStrategy):
@@ -100,8 +100,8 @@ class BoltzmannSelection(SelectionStrategy):
         # Normalize the weights to get selection probabilities
         probabilities = [weight / total for weight in boltzmann_weights]
         # Select one parent based on calculated probabilities
-        selected = random.choices(population.individuals, weights=probabilities, k=1)
-        return selected[0]
+        selected = random.choices(population.individuals, weights=probabilities, k=2)
+        return tuple(selected)
 
 # Steady-State Selection
 class SteadyStateSelection(SelectionStrategy):
@@ -128,5 +128,5 @@ class RankBiasedSelection(SelectionStrategy):
         # Assign rank-based weights with a bias towards higher ranks
         weights = [(self.bias_factor ** (num_individuals - i)) for i in range(num_individuals)]
         # Select one parent based on rank-biased selection weights
-        selected = random.choices(sorted_population, weights=weights, k=1)
-        return selected[0]
+        selected = random.choices(sorted_population, weights=weights, k=2)
+        return tuple(selected)

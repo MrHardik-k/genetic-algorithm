@@ -11,9 +11,9 @@ class HalfCrossover(CrossoverStrategy):
         offspring1_genome = parent1.genome[:crossover_point] + parent2.genome[crossover_point:]
         offspring2_genome = parent2.genome[:crossover_point] + parent1.genome[crossover_point:]
         
-        offspring1 = Individual(parent1.dna, len(parent1.genome), parent1.fitness_function)
+        offspring1 = Individual(parent1.dna, len(parent1.genome))
         offspring1.genome = offspring1_genome
-        offspring2 = Individual(parent1.dna, len(parent2.genome), parent1.fitness_function)
+        offspring2 = Individual(parent1.dna, len(parent2.genome))
         offspring2.genome = offspring2_genome
         
         return offspring1, offspring2
@@ -27,9 +27,9 @@ class OnePointCrossover(CrossoverStrategy):
         offspring1_genome = parent1.genome[:crossover_point] + parent2.genome[crossover_point:]
         offspring2_genome = parent2.genome[:crossover_point] + parent1.genome[crossover_point:]
         
-        offspring1 = Individual(parent1.dna, len(parent1.genome), parent1.fitness_function)
+        offspring1 = Individual(parent1.dna, len(parent1.genome))
         offspring1.genome = offspring1_genome
-        offspring2 = Individual(parent1.dna, len(parent2.genome), parent1.fitness_function)
+        offspring2 = Individual(parent1.dna, len(parent2.genome))
         offspring2.genome = offspring2_genome
         
         return offspring1, offspring2
@@ -45,9 +45,9 @@ class TwoPointCrossover(CrossoverStrategy):
         offspring1_genome = parent1.genome[:point1] + parent2.genome[point1:point2] + parent1.genome[point2:]
         offspring2_genome = parent2.genome[:point1] + parent1.genome[point1:point2] + parent2.genome[point2:]
         
-        offspring1 = Individual(parent1.dna, len(parent1.genome), parent1.fitness_function)
+        offspring1 = Individual(parent1.dna, len(parent1.genome))
         offspring1.genome = offspring1_genome
-        offspring2 = Individual(parent2.dna, len(parent2.genome), parent2.fitness_function)
+        offspring2 = Individual(parent2.dna, len(parent2.genome))
         offspring2.genome = offspring2_genome
         
         return offspring1, offspring2
@@ -60,9 +60,9 @@ class UniformCrossover(CrossoverStrategy):
         offspring1_genome = [random.choice([gene1, gene2]) for gene1, gene2 in zip(parent1.genome, parent2.genome)]
         offspring2_genome = [random.choice([gene1, gene2]) for gene1, gene2 in zip(parent2.genome, parent1.genome)]
         
-        offspring1 = Individual(parent1.dna, len(parent1.genome), parent1.fitness_function)
+        offspring1 = Individual(parent1.dna, len(parent1.genome))
         offspring1.genome = offspring1_genome
-        offspring2 = Individual(parent2.dna, len(parent2.genome), parent2.fitness_function)
+        offspring2 = Individual(parent2.dna, len(parent2.genome))
         offspring2.genome = offspring2_genome
         
         return offspring1, offspring2
@@ -85,9 +85,9 @@ class BlendCrossover(CrossoverStrategy):
             offspring1_genome.append(random.uniform(lower - self.alpha * diff, upper + self.alpha * diff))
             offspring2_genome.append(random.uniform(lower - self.alpha * diff, upper + self.alpha * diff))
         
-        offspring1 = Individual(parent1.dna, len(parent1.genome), parent1.fitness_function)
+        offspring1 = Individual(parent1.dna, len(parent1.genome))
         offspring1.genome = offspring1_genome
-        offspring2 = Individual(parent2.dna, len(parent2.genome), parent2.fitness_function)
+        offspring2 = Individual(parent2.dna, len(parent2.genome))
         offspring2.genome = offspring2_genome
         
         return offspring1, offspring2
@@ -103,9 +103,9 @@ class ArithmeticCrossover(CrossoverStrategy):
         offspring1_genome = [(self.alpha * gene1 + (1 - self.alpha) * gene2) for gene1, gene2 in zip(parent1.genome, parent2.genome)]
         offspring2_genome = [(self.alpha * gene2 + (1 - self.alpha) * gene1) for gene1, gene2 in zip(parent1.genome, parent2.genome)]
         
-        offspring1 = Individual(parent1.dna, len(parent1.genome), parent1.fitness_function)
+        offspring1 = Individual(parent1.dna, len(parent1.genome))
         offspring1.genome = offspring1_genome
-        offspring2 = Individual(parent2.dna, len(parent2.genome), parent2.fitness_function)
+        offspring2 = Individual(parent2.dna, len(parent2.genome))
         offspring2.genome = offspring2_genome
         
         return offspring1, offspring2
@@ -126,9 +126,9 @@ class PMXCrossover(CrossoverStrategy):
         offspring1_genome[point1:point2] = parent2.genome[point1:point2]
         offspring2_genome[point1:point2] = parent1.genome[point1:point2]
 
-        offspring1 = Individual(parent1.dna, len(parent1.genome), parent1.fitness_function)
+        offspring1 = Individual(parent1.dna, len(parent1.genome))
         offspring1.genome = offspring1_genome
-        offspring2 = Individual(parent2.dna, len(parent2.genome), parent2.fitness_function)
+        offspring2 = Individual(parent2.dna, len(parent2.genome))
         offspring2.genome = offspring2_genome
         
         return offspring1, offspring2

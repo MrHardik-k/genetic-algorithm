@@ -1,4 +1,4 @@
-from .fitness_function import MaximizeOnesFitness, MinimizeDistanceFitness, WeightedSumFitness
-from .selection import RouletteWheelSelection, TournamentSelection, StochasticUniversalSampling
-from .crossover import OnePointCrossover, UniformCrossover
-from .mutation import SwapMutation, GaussianMutation, PolynomialMutation
+from .fitness_function import MaximizeOnesFitness, MinimizeDistanceFitness, WeightedSumFitness, CompairTargetFitness
+from .selection import RouletteWheelSelection, TournamentSelection, StochasticUniversalSampling, RankSelection, ElitismSelection, TruncationSelection, RankBiasedSelection, BoltzmannSelection, SteadyStateSelection
+from .crossover import OnePointCrossover, UniformCrossover, HalfCrossover, TwoPointCrossover, BlendCrossover, ArithmeticCrossover, PMXCrossover
+from .mutation import SwapMutation, GaussianMutation, PolynomialMutation, ElementMutation, MultiElementMutation, BitFlipMutation, ScrambleMutation, SegmentSwapMutation, BoundaryMutation

@@ -27,22 +27,22 @@ class DNA:
         """
         return self.dna_strategy.get_random_genes(genes_size)
 
-    def get_genes(self):
+    def get_genes(self) -> list:
         return self.dna_strategy.genes
 
-    def get_target(self):
+    def get_target(self) -> list:
         return self.dna_strategy.target
 
-    def get_selection(self):
+    def get_selection(self) -> 'Selection':
         return self.dna_strategy.selection
 
-    def get_crossover(self):
+    def get_crossover(self) -> 'Crossover':
         return self.dna_strategy.crossover
 
-    def get_mutation(self):
+    def get_mutation(self) -> 'Mutation':
         return self.dna_strategy.mutation
 
-    def get_fitness_function(self):
+    def get_fitness_function(self) -> 'FitnessFunction':
         return self.dna_strategy.fitness_function
 
 
@@ -54,7 +54,7 @@ class FitnessFunction:
     def __init__(self, fitness_strategy: FitnessStrategy):
         self.fitness_strategy = fitness_strategy
 
-    def evaluate(self, genome):
+    def evaluate(self, genome:list):
         """
         Evaluates the fitness of a given genome.
         """
@@ -117,17 +117,16 @@ class GeneticAlgorithm:
     Executes the genetic algorithm using DNA, population, selection, crossover, and mutation strategies.
     """
 
-    def __init__(self, dna: DNA, population_size: int, genome_size: int, mutation_rate: float, bestFitness=None):
+    def __init__(self, dna: DNA, population_size: int, genome_size: int, mutation_rate: float):
         # Initialize components and parameters
         self.dna = dna
         self.mutation_rate = mutation_rate
         self.dna.get_mutation().set_mutation_rate(mutation_rate)
         self.currentGen = 0
-        self.bestFitness = bestFitness
-        self.allBest = None
+        self.allBestIndividual = None
         self.population = Population(dna, population_size, genome_size)
 
-    def run(self, generations: int):
+    def run(self, generations: int) -> Individual:
         """
         Runs the genetic algorithm across the specified number of generations.
         """
@@ -137,7 +136,7 @@ class GeneticAlgorithm:
             best_individual = self.run_single_generation()
         return best_individual
 
-    def run_single_generation(self):
+    def run_single_generation(self) -> Individual:
         """
         Runs a single generation: selection, crossover, mutation, and evaluation.
         """
@@ -168,10 +167,10 @@ class GeneticAlgorithm:
 
         # Track the best individual in the current generation
         best_individual = self.population.get_best_individual()
-        if self.allBest is None:
-            self.allBest = best_individual
-        elif best_individual.fitness > self.allBest.fitness:
-            self.allBest = best_individual
+        if self.allBestIndividual is None:
+            self.allBestIndividual = best_individual
+        elif best_individual.fitness > self.allBestIndividual.fitness:
+            self.allBestIndividual = best_individual
         self.currentGen += 1
         print(f"Generation {self.currentGen}, Best Fitness: {best_individual.fitness}")
         return best_individual
